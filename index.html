@@ -1329,5 +1329,55 @@
         setTimeout(() => addAlert("RBI policy announcement at 2:00 PM may increase market volatility"), 6000);
         setTimeout(() => addAlert("Quantum pattern recognition detected correlated movements in IT stocks"), 8000);
     </script>
+<!-- Add Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+<script>
+  // Firebase configuration - from your Firebase project
+  const firebaseConfig = {
+    apiKey: "AIzaSyB1KadCwf1pe7juzWtikcIx6mC8YJH5Dn9",
+    authDomain: "toptter-trading.firebaseapp.com",
+    projectId: "toptter-trading",
+    storageBucket: "toptter-trading.firebasestorage.app",
+    messagingSenderId: "747829253198",
+    appId: "1:747829253198:web:coco67e6ea5d876be65647"
+  };
+  
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+</script>
+<script type="module">
+  // Import Firestore
+  import { getFirestore, doc, setDoc, getDoc, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+  // Initialize Firestore
+  const db = getFirestore();
+  const auth = getAuth();
+
+  // Example: Save a trade call
+  async function saveTradeCall() {
+    const user = auth.currentUser;
+    if (!user) {
+      alert("Please log in first");
+      return;
+    }
+
+    await addDoc(collection(db, "Users", user.uid, "tradeCalls"), {
+      action: "BUY",
+      symbol: "AAPL",
+      price: 175.5,
+      timestamp: new Date(),
+      userId: user.uid
+    });
+
+    alert("Trade call saved!");
+  }
+
+  // Call the function when button clicked
+  document.getElementById("saveBtn").addEventListener("click", saveTradeCall);
+</script>
 </body>
 </html>
