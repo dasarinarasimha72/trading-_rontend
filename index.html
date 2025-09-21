@@ -1,187 +1,666 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>KOOBERA - Quantum Financial Analysis Platform</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js"></script>
-  <style>
-    /* Keep your original styles */
-    :root {
-      --primary: #0a0a1a;
-      --secondary: #0f1538;
-      --accent: #1a237e;
-      --quantum: #00e5ff;
-      --highlight: #7c4dff;
-      --success: #00e676;
-      --warning: #ffeb3b;
-      --danger: #ff1744;
-      --text: #e0e0e0;
-      --card-bg: rgba(26, 35, 126, 0.2);
-      --glow: 0 0 10px rgba(124, 77, 255, 0.7);
-    }
-    body {
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
-      color: var(--text);
-      min-height: 100vh;
-      padding: 20px;
-      overflow-x: hidden;
-    }
-    .container {
-      max-width: 1600px;
-      margin: 0 auto;
-    }
-
-    /* ---------- LOGIN FORM STYLES ---------- */
-    #loginScreen {
-      max-width: 400px;
-      margin: 100px auto;
-      padding: 30px;
-      background: var(--card-bg);
-      border-radius: 12px;
-      box-shadow: var(--glow);
-      backdrop-filter: blur(8px);
-    }
-    #loginScreen h2 {
-      text-align: center;
-      margin-bottom: 20px;
-      color: var(--quantum);
-    }
-    #loginForm input {
-      width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      border-radius: 8px;
-      border: 1px solid rgba(124, 77, 255, 0.5);
-      background: rgba(10, 10, 26, 0.7);
-      color: var(--text);
-      font-size: 1rem;
-    }
-    #loginForm button {
-      width: 100%;
-      padding: 12px;
-      border-radius: 8px;
-      border: none;
-      font-weight: 600;
-      background: linear-gradient(135deg, var(--highlight), var(--quantum));
-      color: white;
-      cursor: pointer;
-      margin-top: 10px;
-    }
-    #logoutBtn {
-      background: rgba(255,255,255,0.1);
-      border: none;
-      color: var(--text);
-      padding: 8px 14px;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-    #logoutBtn:hover {
-      background: rgba(255,255,255,0.2);
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KOOBERA - Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0a0a1a;
+            --secondary: #0f1538;
+            --accent: #1a237e;
+            --quantum: #00e5ff;
+            --highlight: #7c4dff;
+            --success: #00e676;
+            --warning: #ffeb3b;
+            --danger: #ff1744;
+            --text: #e0e0e0;
+            --card-bg: rgba(26, 35, 126, 0.2);
+            --glow: 0 0 10px rgba(124, 77, 255, 0.7);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: var(--text);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .auth-container {
+            max-width: 500px;
+            width: 100%;
+            margin: 0 auto;
+        }
+        
+        .auth-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: var(--glow);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(124, 77, 255, 0.3);
+            margin-bottom: 20px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .logo h1 {
+            font-size: 2.8rem;
+            background: linear-gradient(to right, var(--quantum), var(--highlight));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+        
+        .logo-icon {
+            font-size: 3rem;
+            color: var(--quantum);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { text-shadow: 0 0 5px var(--quantum); }
+            50% { text-shadow: 0 0 20px var(--quantum); }
+           100% { text-shadow: 0 0 5px var(--quantum); }
+        }
+        
+        .tagline {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-top: -5px;
+            color: var(--quantum);
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 25px;
+            border-bottom: 1px solid rgba(124, 77, 255, 0.3);
+        }
+        
+        .auth-tab {
+            padding: 15px 20px;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: all 0.3s ease;
+            text-align: center;
+            flex: 1;
+            border-bottom: 3px solid transparent;
+        }
+        
+        .auth-tab.active {
+            opacity: 1;
+            border-bottom: 3px solid var(--quantum);
+            color: var(--quantum);
+        }
+        
+        .auth-form {
+            display: none;
+        }
+        
+        .auth-form.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            opacity: 0.9;
+            color: var(--quantum);
+        }
+        
+        .input-with-icon {
+            position: relative;
+        }
+        
+        .input-with-icon i {
+            position: absolute;
+            left: 15px;
+            top: 15px;
+            color: var(--quantum);
+        }
+        
+        .input-with-icon input {
+            width: 100%;
+            padding: 15px 15px 15px 45px;
+            border-radius: 10px;
+            border: 1px solid rgba(124, 77, 255, 0.5);
+            background: rgba(10, 10, 26, 0.7);
+            color: var(--text);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .input-with-icon input:focus {
+            outline: none;
+            border-color: var(--quantum);
+            box-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
+        }
+        
+        .btn {
+            padding: 15px 20px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            font-size: 1rem;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--highlight), var(--quantum));
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(124, 77, 255, 0.4);
+        }
+        
+        .btn-google {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text);
+            margin-top: 15px;
+        }
+        
+        .btn-google:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .auth-divider {
+            display: flex;
+            align-items: center;
+            margin: 25px 0;
+            color: rgba(224, 224, 224, 0.7);
+        }
+        
+        .auth-divider::before,
+        .auth-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(124, 77, 255, 0.3);
+        }
+        
+        .auth-divider span {
+            padding: 0 15px;
+            font-size: 0.9rem;
+        }
+        
+        .form-footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .form-footer a {
+            color: var(--quantum);
+            text-decoration: none;
+        }
+        
+        .alert {
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .alert-error {
+            background: rgba(255, 23, 68, 0.2);
+            border: 1px solid rgba(255, 23, 68, 0.5);
+            color: #ff8a9e;
+        }
+        
+        .alert-success {
+            background: rgba(0, 230, 118, 0.2);
+            border: 1px solid rgba(0, 230, 118, 0.5);
+            color: #6effb8;
+        }
+        
+        .alert i {
+            font-size: 1.2rem;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+        
+        @media (max-width: 600px) {
+            .auth-container {
+                padding: 10px;
+            }
+            
+            .auth-card {
+                padding: 20px;
+            }
+            
+            .logo h1 {
+                font-size: 2.2rem;
+            }
+            
+            .logo-icon {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
 </head>
 <body>
-  <!-- LOGIN SCREEN -->
-  <div id="loginScreen">
-    <h2>Login to KOOBERA</h2>
-    <form id="loginForm">
-      <input type="email" id="email" placeholder="Email" required>
-      <input type="password" id="password" placeholder="Password" required>
-      <button type="submit">Login</button>
-    </form>
-    <p id="loginError" style="color:red; margin-top:10px;"></p>
-  </div>
-
-  <!-- DASHBOARD SCREEN (hidden until login) -->
-  <div id="dashboard" style="display:none;">
-    <div class="container">
-      <header>
+    <div class="auth-container">
         <div class="logo">
-          <div class="logo-icon"><i class="fas fa-atom"></i></div>
-          <div>
+            <div class="logo-icon"><i class="fas fa-atom"></i></div>
             <h1>KOOBERA</h1>
-            <div class="tagline">Ultimate Predictive Trading System</div>
-          </div>
         </div>
-        <div class="user-info">
-          <div class="user-avatar"><i class="fas fa-user-secret"></i></div>
-          <div>
-            <div id="userEmail">Logged in</div>
-            <div class="market-status">
-              <div class="status-indicator status-open"></div>
-              <span>NSE & BSE Open</span>
+        <div class="tagline">Ultimate Predictive Trading System</div>
+        
+        <div class="auth-card">
+            <div class="auth-tabs">
+                <div class="auth-tab active" data-tab="login">Login</div>
+                <div class="auth-tab" data-tab="register">Register</div>
             </div>
-          </div>
-          <button id="logoutBtn">Logout</button>
+            
+            <div id="alertContainer"></div>
+            
+            <form id="loginForm" class="auth-form active">
+                <div class="form-group">
+                    <label for="loginEmail">Email</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="loginEmail" placeholder="Enter your email" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="loginPassword" placeholder="Enter your password" required>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary" id="loginBtn">
+                    <i class="fas fa-sign-in-alt"></i> Login to Dashboard
+                </button>
+                
+                <div class="auth-divider">
+                    <span>OR</span>
+                </div>
+                
+                <button type="button" class="btn btn-google" id="googleLoginBtn">
+                    <i class="fab fa-google"></i> Sign in with Google
+                </button>
+                
+                <div class="form-footer">
+                    <a href="#" id="forgotPassword">Forgot password?</a>
+                </div>
+            </form>
+            
+            <form id="registerForm" class="auth-form">
+                <div class="form-group">
+                    <label for="registerName">Full Name</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="registerName" placeholder="Enter your full name" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="registerEmail">Email</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="registerEmail" placeholder="Enter your email" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="registerPassword">Password</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="registerPassword" placeholder="Create a password (min. 6 characters)" required minlength="6">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="registerConfirmPassword">Confirm Password</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="registerConfirmPassword" placeholder="Confirm your password" required minlength="6">
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary" id="registerBtn">
+                    <i class="fas fa-user-plus"></i> Create Account
+                </button>
+                
+                <div class="auth-divider">
+                    <span>OR</span>
+                </div>
+                
+                <button type="button" class="btn btn-google" id="googleRegisterBtn">
+                    <i class="fab fa-google"></i> Sign up with Google
+                </button>
+            </form>
         </div>
-      </header>
-
-      <!-- === Your ORIGINAL DASHBOARD CONTENT STARTS HERE === -->
-      <!-- I’m not rewriting everything, I’m keeping all your KOOBERA code intact -->
-      <!-- (control panel, charts, methodology, results, alerts, footer etc.) -->
-      <!-- Just paste your original dashboard HTML inside this #dashboard div -->
-      <!-- For brevity, I'm indicating it as ... below -->
-
-      <!-- === PASTE YOUR ORIGINAL DASHBOARD HTML HERE === -->
+        
+        <div class="footer">
+            <p>KOOBERA &copy; 2023 | Ultimate Predictive Trading Platform</p>
+            <p>This is a simulation for demonstration purposes only. Not financial advice.</p>
+        </div>
     </div>
-  </div>
 
-  <!-- FIREBASE CONFIG + LOGIN SCRIPT -->
-  <script>
-    // Your Firebase Config (replace with your actual values)
-    const firebaseConfig = {
-      apiKey: "AIzaSyBIKa4CwfDeE7juzMtiKeIx8mC8YJH5Qn0",
-      authDomain: "toptter-trading.firebaseapp.com",
-      projectId: "toptter-trading",
-      storageBucket: "toptter-trading.appspot.com",
-      messagingSenderId: "747829253190",
-      appId: "1:747829253190:web:ccce57e5ea5d3f6be36647"
-    };
-    const app = firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-
-    const loginScreen = document.getElementById('loginScreen');
-    const dashboard = document.getElementById('dashboard');
-    const loginForm = document.getElementById('loginForm');
-    const loginError = document.getElementById('loginError');
-    const userEmail = document.getElementById('userEmail');
-    const logoutBtn = document.getElementById('logoutBtn');
-
-    // Login form submit
-    loginForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-      auth.signInWithEmailAndPassword(email, password)
-        .then((userCredential) => {
-          loginError.textContent = "";
-        })
-        .catch((error) => {
-          loginError.textContent = error.message;
+    <!-- Firebase App (core Firebase SDK) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <!-- Firebase Authentication -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    
+    <script>
+        // Firebase configuration - Replace with your actual Firebase config
+        const firebaseConfig = {
+            apiKey: "AIzaSyBIKa4CwfDeE7juzMtiKeIx8mC8YJH5Qn0",
+            authDomain: "toptter-trading.firebaseapp.com",
+            projectId: "toptter-trading",
+            storageBucket: "toptter-trading.appspot.com",
+            messagingSenderId: "747829253190",
+            appId: "1:747829253190:web:ccce57e5ea5d3f6be36647"
+        };
+        
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        
+        // DOM elements
+        const authTabs = document.querySelectorAll('.auth-tab');
+        const authForms = document.querySelectorAll('.auth-form');
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        const loginBtn = document.getElementById('loginBtn');
+        const registerBtn = document.getElementById('registerBtn');
+        const googleLoginBtn = document.getElementById('googleLoginBtn');
+        const googleRegisterBtn = document.getElementById('googleRegisterBtn');
+        const forgotPasswordLink = document.getElementById('forgotPassword');
+        const alertContainer = document.getElementById('alertContainer');
+        
+        // Switch between login and register tabs
+        authTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabId = tab.getAttribute('data-tab');
+                
+                // Update active tab
+                authTabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                // Show corresponding form
+                authForms.forEach(form => form.classList.remove('active'));
+                document.getElementById(`${tabId}Form`).classList.add('active');
+                
+                // Clear any alerts
+                clearAlerts();
+            });
         });
-    });
-
-    // Auth state listener
-    auth.onAuthStateChanged(user => {
-      if (user) {
-        loginScreen.style.display = 'none';
-        dashboard.style.display = 'block';
-        userEmail.textContent = user.email;
-      } else {
-        loginScreen.style.display = 'block';
-        dashboard.style.display = 'none';
-      }
-    });
-
-    // Logout
-    logoutBtn.addEventListener('click', () => {
-      auth.signOut();
-    });
-  </script>
+        
+        // Show alert message
+        function showAlert(message, type = 'error') {
+            clearAlerts();
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.innerHTML = `
+                <i class="fas ${type === 'error' ? 'fa-exclamation-circle' : 'fa-check-circle'}"></i>
+                <span>${message}</span>
+            `;
+            alertContainer.appendChild(alert);
+            
+            // Auto remove after 5 seconds
+            if (type !== 'error') {
+                setTimeout(() => {
+                    alert.remove();
+                }, 5000);
+            }
+        }
+        
+        // Clear all alerts
+        function clearAlerts() {
+            alertContainer.innerHTML = '';
+        }
+        
+        // Handle login form submission
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            // Show loading state
+            loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
+            loginBtn.disabled = true;
+            
+            try {
+                // Sign in with email and password
+                const userCredential = await auth.signInWithEmailAndPassword(email, password);
+                const user = userCredential.user;
+                
+                // Show success message
+                showAlert('Login successful! Redirecting to dashboard...', 'success');
+                
+                // Store user data in localStorage
+                localStorage.setItem('kooberaUser', JSON.stringify({
+                    uid: user.uid,
+                    email: user.email,
+                    displayName: user.displayName
+                }));
+                
+                // Redirect to main application after a brief delay
+                setTimeout(() => {
+                    window.location.href = 'index.html'; // Your main app page
+                }, 1500);
+                
+            } catch (error) {
+                // Handle errors
+                let errorMessage = 'Failed to login. Please try again.';
+                
+                switch (error.code) {
+                    case 'auth/user-not-found':
+                        errorMessage = 'No account found with this email.';
+                        break;
+                    case 'auth/wrong-password':
+                        errorMessage = 'Incorrect password. Please try again.';
+                        break;
+                    case 'auth/invalid-email':
+                        errorMessage = 'Invalid email address format.';
+                        break;
+                    case 'auth/user-disabled':
+                        errorMessage = 'This account has been disabled.';
+                        break;
+                }
+                
+                showAlert(errorMessage);
+                
+                // Reset button state
+                loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login to Dashboard';
+                loginBtn.disabled = false;
+            }
+        });
+        
+        // Handle register form submission
+        registerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('registerConfirmPassword').value;
+            
+            // Validate passwords match
+            if (password !== confirmPassword) {
+                showAlert('Passwords do not match. Please try again.');
+                return;
+            }
+            
+            // Show loading state
+            registerBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating Account...';
+            registerBtn.disabled = true;
+            
+            try {
+                // Create user with email and password
+                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                const user = userCredential.user;
+                
+                // Update user profile with name
+                await user.updateProfile({
+                    displayName: name
+                });
+                
+                // Show success message
+                showAlert('Account created successfully! Redirecting to dashboard...', 'success');
+                
+                // Store user data in localStorage
+                localStorage.setItem('kooberaUser', JSON.stringify({
+                    uid: user.uid,
+                    email: user.email,
+                    displayName: name
+                }));
+                
+                // Redirect to main application after a brief delay
+                setTimeout(() => {
+                    window.location.href = 'index.html'; // Your main app page
+                }, 1500);
+                
+            } catch (error) {
+                // Handle errors
+                let errorMessage = 'Failed to create account. Please try again.';
+                
+                switch (error.code) {
+                    case 'auth/email-already-in-use':
+                        errorMessage = 'This email is already registered. Please login instead.';
+                        break;
+                    case 'auth/invalid-email':
+                        errorMessage = 'Invalid email address format.';
+                        break;
+                    case 'auth/weak-password':
+                        errorMessage = 'Password is too weak. Please use a stronger password.';
+                        break;
+                    case 'auth/operation-not-allowed':
+                        errorMessage = 'Email/password accounts are not enabled.';
+                        break;
+                }
+                
+                showAlert(errorMessage);
+                
+                // Reset button state
+                registerBtn.innerHTML = '<i class="fas fa-user-plus"></i> Create Account';
+                registerBtn.disabled = false;
+            }
+        });
+        
+        // Handle Google authentication
+        function signInWithGoogle() {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            
+            auth.signInWithPopup(provider)
+                .then((result) => {
+                    const user = result.user;
+                    
+                    // Show success message
+                    showAlert('Login successful! Redirecting to dashboard...', 'success');
+                    
+                    // Store user data in localStorage
+                    localStorage.setItem('kooberaUser', JSON.stringify({
+                        uid: user.uid,
+                        email: user.email,
+                        displayName: user.displayName,
+                        photoURL: user.photoURL
+                    }));
+                    
+                    // Redirect to main application after a brief delay
+                    setTimeout(() => {
+                        window.location.href = 'index.html'; // Your main app page
+                    }, 1500);
+                })
+                .catch((error) => {
+                    // Handle errors
+                    showAlert('Failed to authenticate with Google. Please try again.');
+                    console.error('Google auth error:', error);
+                });
+        }
+        
+        // Add Google auth event listeners
+        googleLoginBtn.addEventListener('click', signInWithGoogle);
+        googleRegisterBtn.addEventListener('click', signInWithGoogle);
+        
+        // Handle password reset
+        forgotPasswordLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value;
+            
+            if (!email) {
+                showAlert('Please enter your email address first.');
+                return;
+            }
+            
+            auth.sendPasswordResetEmail(email)
+                .then(() => {
+                    showAlert('Password reset email sent! Check your inbox.', 'success');
+                })
+                .catch((error) => {
+                    let errorMessage = 'Failed to send reset email. Please try again.';
+                    
+                    if (error.code === 'auth/user-not-found') {
+                        errorMessage = 'No account found with this email.';
+                    }
+                    
+                    showAlert(errorMessage);
+                });
+        });
+        
+        // Check if user is already logged in
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                // User is signed in, redirect to main app
+                window.location.href = 'index.html';
+            }
+        });
+    </script>
 </body>
 </html>
