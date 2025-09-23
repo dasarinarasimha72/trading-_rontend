@@ -79,10 +79,8 @@
     // --- Initialize variables ---
     let currentStock = null;
     let stockChart = null;
-    let showRegression = false;
-    let regressionData = null;
 
-    // mock DB for metadata only
+    // mock DB for metadata only (icon, name) while waiting for live data
     const stockDatabase = {
       "TCS": { name: "Tata Consultancy Services", symbol: "TCS", price: 0, changePercent: 0, icon: "fa-building", sector: "IT" },
       "RELIANCE": { name: "Reliance Industries", symbol: "RELIANCE", price: 0, changePercent: 0, icon: "fa-industry", sector: "Energy" },
@@ -90,7 +88,7 @@
     };
 
     // --- Realtime Socket.IO integration ---
-    const BACKEND_URL = 'https://trading-backend-bdbt.onrender.com'; // your backend
+    const BACKEND_URL = 'https://trading-backend-bdbt.onrender.com';
     let socket = null;
 
     function initSocket() {
@@ -120,7 +118,7 @@
             changeEl.className = 'change ' + (currentStock.changePercent >= 0 ? 'price-up' : 'price-down');
           }
 
-          // update Chart
+          // update chart
           if (stockChart) {
             const ds = stockChart.data.datasets[0];
             ds.data.push(Number(currentStock.price));
